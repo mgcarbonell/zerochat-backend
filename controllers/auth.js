@@ -1,7 +1,10 @@
 const db = require('../models')
 
 const login = (req, res) => {
-  res.json({ user: req.user.id })
+  res.json({ 
+    user: req.user.id,
+    username: req.user.username 
+  })
 }
 
 const register = (req, res) => {
@@ -9,7 +12,7 @@ const register = (req, res) => {
   
   // validate the POSTed data - making sure we have a name, an email, a pw
   if (!username || !email || !password) {
-    return res.json({ message: 'Please enter an username, an email, and a password' })
+    return res.json({ message: 'Please enter a name, an email, and a password' })
   }
 
   // make sure the user doesn't already exist
@@ -23,7 +26,8 @@ const register = (req, res) => {
       db.user.create({
         username,
         email,
-        password
+        password,
+        bio
       }).then(newUser => {
         console.log('New user created!')
         res.json(newUser)
