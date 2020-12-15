@@ -11,7 +11,7 @@ const {
         addUsers,
         removeUser,
         getUser,
-        usersInRoom
+        usersInNode
                     } = require('./roomManagement.js') 
 
 const port = process.env.PORT || 4000
@@ -60,26 +60,30 @@ app.use(passport.session())
 // middleware - API routes
 app.use('/api/v1/auth', routes.auth)
 
-io.on('connection', (socket) => {
+io.on('connect', (socket) => {
   // event and a call back
-  socket.on('join', ({ username, node }) => {
-    // console.log(username, node)
-    const { userInRoom } = addUsers({ id: socket.id, username, node });
-    socket.emit('message', { user: 'null.void', text: `${username}, connecting to node ${userInRoom.node}`});
-    socket.broadcast.to(userInRoom.node).emit('message', { user: 'null.void', text: `${username} joining from PORT: ${Math.floor(Math.random() * 9999)}`});
-    socket.join(userInRoom.node);
-
+  socket.on('join', ({ username, node }, callback) => {
+    console.log({username, node})
+    const { user } = addUsers({ id: socket.id, username, node });
+    socket.join(user.node)
+    socket.emit('message', { user: 'null.void', text: `${user.username}, connecting to node ${user.node}`});
+    socket.broadcast.to(user.node).emit('message', { user: 'null.void', text: `${user.username} joining from PORT: ${Math.floor(Math.random() * 9999)}`});
+    io.to(user.node).emit('nodeData', { node: user.node, users: usersInNode(user.node) })
+    callback();
   })
   // socket takes in an event, and a callback
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id)
     io.to(user.node).emit('message', { user: user.username, text: message });
-
     callback();
   })
   // event and a call back
   socket.on('disconnect', () => {
-    console.log('user has disconnected');
+    const user = removeUser(socket.id)
+    if(user){
+      io.to(user.node).emit('message', { user: 'null.void', text: `${user.username} is returning to meat space.`})
+      io.to(user.node).emit('nodeData', { node: user.node, users: usersInNode(user.node)})
+    }
   })
 })
 

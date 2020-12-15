@@ -2,12 +2,12 @@ const users = [];
 
 const addUsers = ({ id, username, node }) => {
   
-  user = username
+  username = username.trim().toLowerCase();
   node = node.trim().toLowerCase();
 
-  const userInRoom = { id, user, node }
-  users.push(userInRoom)
-  return { userInRoom }
+  const user = { id, username, node }
+  users.push(user)
+  return { user }
 }
 
 const removeUser = (id) => {
@@ -19,6 +19,6 @@ const removeUser = (id) => {
 
 const getUser = (id) => users.find((user) => user.id === id);
 
-const usersInRoom = (node) => users.filter((user) => user.node === node); 
+const usersInNode = (node) => users.filter((user) => user.node === node); 
 
-module.exports = { addUsers, removeUser, getUser, usersInRoom }
+module.exports = { addUsers, removeUser, getUser, usersInNode }
