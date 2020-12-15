@@ -59,17 +59,16 @@ app.use(passport.session())
 
 // middleware - API routes
 app.use('/api/v1/auth', routes.auth)
-// event and a call back
+
 io.on('connection', (socket) => {
   // event and a call back
-  socket.on('join', ({ username, node }, callback) => {
-    const { error, userInRoom } = addUsers({ id: socket.id, username, node });
-    if(error) return callback(error);
-    socket.emit('message', { user: 'null.void', text: `${userInRoom.username}, connecting to node ${userInRoom.node}`});
-    socket.broadcast.to(userInRoom.node).emit('message', { user: 'null.void', text: `${userInRoom.username} joining from PORT: ${Math.floor(Math.random * 4)}`});
+  socket.on('join', ({ username, node }) => {
+    // console.log(username, node)
+    const { userInRoom } = addUsers({ id: socket.id, username, node });
+    socket.emit('message', { user: 'null.void', text: `${username}, connecting to node ${userInRoom.node}`});
+    socket.broadcast.to(userInRoom.node).emit('message', { user: 'null.void', text: `${username} joining from PORT: ${Math.floor(Math.random() * 9999)}`});
     socket.join(userInRoom.node);
 
-    callback();
   })
   // socket takes in an event, and a callback
   socket.on('sendMessage', (message, callback) => {
