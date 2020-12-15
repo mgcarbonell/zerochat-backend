@@ -1,4 +1,5 @@
 {
+  "main": "server.js",
   "dependencies": {
     "aes256": "^1.0.4",
     "bcrypt": "^5.0.0",
@@ -15,6 +16,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
     "sequelize": "^6.3.5",
+    "socket.io": "^3.0.4",
     "socketio": "^1.0.0"
   }
 }

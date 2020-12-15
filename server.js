@@ -4,12 +4,20 @@ const express = require('express')
 const cors = require('cors')
 const session = require('express-session')
 const morgan = require('morgan')
-
+const http = require('http')
 const routes = require('./routes')
 const passport = require('./passport')
+const {
+        addUsers,
+        removeUser,
+        getUser,
+        usersInRoom
+                    } = require('./roomManagement.js') 
 
 const port = process.env.PORT || 4000
 const app = express()
+
+
 
 // middleware - server logging
 app.use(morgan('dev'))
@@ -26,8 +34,15 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+const server = http.createServer(app)
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
-// middleware - session config
 app.use(session({
   // session is stored in the DB
   secret: "REPLACE_THIS_WITH_A_REAL_SECRET",
@@ -44,6 +59,30 @@ app.use(passport.session())
 
 // middleware - API routes
 app.use('/api/v1/auth', routes.auth)
+// event and a call back
+io.on('connection', (socket) => {
+  // event and a call back
+  socket.on('join', ({ username, node }, callback) => {
+    const { error, userInRoom } = addUsers({ id: socket.id, username, node });
+    if(error) return callback(error);
+    socket.emit('message', { user: 'null.void', text: `${userInRoom.username}, connecting to node ${userInRoom.node}`});
+    socket.broadcast.to(userInRoom.node).emit('message', { user: 'null.void', text: `${userInRoom.username} joining from PORT: ${Math.floor(Math.random * 4)}`});
+    socket.join(userInRoom.node);
+
+    callback();
+  })
+  // socket takes in an event, and a callback
+  socket.on('sendMessage', (message, callback) => {
+    const user = getUser(socket.id)
+    io.to(user.node).emit('message', { user: user.username, text: message });
+
+    callback();
+  })
+  // event and a call back
+  socket.on('disconnect', () => {
+    console.log('user has disconnected');
+  })
+})
 
 // connection
-app.listen(port, () => console.log(`Server is running on port ${port}`))
+server.listen(port, () => console.log(`Server is running on port ${port}`))
