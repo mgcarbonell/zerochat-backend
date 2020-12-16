@@ -1,15 +1,18 @@
-const db = require('../models')
+const db = require('../models');
 
 const update = (req, res) => {
-  db.user.update(
-    req.body, {
+  db.user.update({
+      username: req.body.username,
+      email: req.body.email,
+      bio: req.body.bio
+  }, {
       where: {
-        id: req.body.id
+          id: req.params.id
       }
-    }).then((updatedUser) => {
-      res.status(200).json({updatedUser})
-    })
-}
+  }).then((updatedUser) => {
+      res.json({user: updatedUser})
+  }).catch(error => console.log("Error in updating user"))
+};
 
 const destroy = (req, res) => {
   const currentUser = req.user.id
@@ -20,9 +23,9 @@ const destroy = (req, res) => {
   }).then(() => {
     res.status(200)
   })
-}
+};
 
 module.exports = {
   update,
   destroy,
-}
+};
