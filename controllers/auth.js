@@ -3,13 +3,13 @@ const db = require('../models')
 const login = (req, res) => {
   res.json({ 
     user: req.user.id,
-    username: req.user.usernamed,
+    username: req.user.username,
     bio: req.user.bio 
   })
 }
 
 const register = (req, res) => {
-  const { username, email, password } = req.body
+  const { username, email, password, bio } = req.body
   
   // validate the POSTed data - making sure we have a name, an email, a pw
   if (!username || !email || !password) {

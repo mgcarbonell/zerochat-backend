@@ -12,9 +12,10 @@ const update = (req, res) => {
 }
 
 const destroy = (req, res) => {
+  const currentUser = req.user.id
   db.user.destroy({
     where: {
-      userId: currentUser.id
+      userId: currentUser
     }
   }).then(() => {
     res.status(200)
