@@ -59,11 +59,12 @@ app.use(passport.session())
 
 // middleware - API routes
 app.use('/api/v1/auth', routes.auth)
+app.use('/api/v1/users', routes.users)
 
 io.on('connect', (socket) => {
   // event and a call back
   socket.on('join', ({ username, node }, callback) => {
-    console.log({username, node})
+    // console.log({username, node})
     const { user } = addUsers({ id: socket.id, username, node });
     socket.join(user.node)
     socket.emit('message', { user: 'null.void', text: `${user.username}, connecting to node ${user.node}`});
@@ -81,7 +82,7 @@ io.on('connect', (socket) => {
   socket.on('disconnect', () => {
     const user = removeUser(socket.id)
     if(user){
-      io.to(user.node).emit('message', { user: 'null.void', text: `${user.username} is returning to meat space.`})
+      io.to(user.node).emit('message', { user: 'null.void', text: `${user.username} is returning to meatspace.`})
       io.to(user.node).emit('nodeData', { node: user.node, users: usersInNode(user.node)})
     }
   })
