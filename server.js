@@ -45,7 +45,7 @@ const io = require('socket.io')(server, {
 
 app.use(session({
   // session is stored in the DB
-  secret: "REPLACE_THIS_WITH_A_REAL_SECRET",
+  secret: process.env.SESSION_SECRET,
   resave: false, // will not resave sessions
   saveUninitialized: false, // only create a session when a property is added to the session
   cookie: {
