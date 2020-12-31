@@ -29,8 +29,8 @@ app.use(express.json())
 const corsOptions = {
   // from which URLs do we want to accept requests
   origin: ['http://localhost:3000'],
-  methods: ["GET", "POST", "DELETE", "PUT"],
-  allowedHeaders: ['Content-Type'],
+  // methods: ["GET", "POST", "DELETE", "PUT"],
+  // allowedHeaders: ['Content-Type'],
   credentials: true, // allow the session cookie to be sent to and from the client
   optionsSuccessStatus: 204
 }
