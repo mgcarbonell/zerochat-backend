@@ -8,11 +8,11 @@ const http = require('http')
 const routes = require('./routes')
 const passport = require('./passport')
 const {
-        addUsers,
-        removeUser,
-        getUser,
-        usersInNode
-                    } = require('./roomManagement.js') 
+  addUsers,
+  removeUser,
+  getUser,
+  usersInNode
+              } = require('./roomManagement.js') 
 
 const port = process.env.PORT || 4000
 const app = express()
@@ -29,15 +29,18 @@ app.use(express.json())
 const corsOptions = {
   // from which URLs do we want to accept requests
   origin: ['http://localhost:3000'],
+  methods: ["GET", "POST", "DELETE", "PUT"],
+  allowedHeaders: ['Content-Type'],
   credentials: true, // allow the session cookie to be sent to and from the client
   optionsSuccessStatus: 204
 }
 
 app.use(cors(corsOptions))
+
 const server = http.createServer(app)
 const io = require('socket.io')(server, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:3000',
     methods: ["GET", "POST"],
     credentials: true
   }
