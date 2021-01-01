@@ -28,7 +28,7 @@ app.use(express.json())
 // middleware - cors
 const corsOptions = {
   // from which URLs do we want to accept requests
-  origin: ['http://localhost:3000', process.env.CLIENT_URL],
+  origin: [process.env.CLIENT_URL],
   methods: ["GET", "POST", "DELETE", "PUT"],
   allowedHeaders: ['Content-Type'],
   credentials: true, // allow the session cookie to be sent to and from the client
@@ -40,7 +40,7 @@ app.use(cors(corsOptions))
 const server = http.createServer(app)
 const io = require('socket.io')(server, {
   cors: {
-    origin: 'http://localhost:3000', process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
     credentials: true
   }
