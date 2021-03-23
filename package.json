@@ -1,8 +1,8 @@
 {
   "main": "server.js",
   "dependencies": {
-    "aes256": "^1.0.4",
-    "bcrypt": "^5.0.0",
+    "aes256": "^1.1.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "ecstatic": "^4.1.4",
@@ -10,14 +10,14 @@
     "express-session": "^1.17.1",
     "http-server": "^0.12.3",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.7",
     "parsejson": "0.0.3",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
-    "sequelize": "^6.3.5",
+    "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
-    "socket.io": "^3.0.4",
+    "socket.io": "^3.1.2",
     "socketio": "^1.0.0"
   }
 }
