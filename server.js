@@ -22,7 +22,7 @@ app.use(morgan("dev"))
 
 // middleware - JSON parsing
 app.use(express.json())
-
+/*
 // middleware - cors
 const corsOptions = {
   // from which URLs do we want to accept requests
@@ -32,6 +32,9 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+*/
+
+app.use(cors())
 
 const server = http.createServer(app)
 const io = require("socket.io")(server, {
@@ -72,14 +75,12 @@ io.on("connect", (socket) => {
       user: "null.void",
       text: `${user.username}, connecting to node ${user.node}`,
     })
-    socket.broadcast
-      .to(user.node)
-      .emit("message", {
-        user: "null.void",
-        text: `${user.username} joining from PORT: ${Math.floor(
-          Math.random() * 9999
-        )}`,
-      })
+    socket.broadcast.to(user.node).emit("message", {
+      user: "null.void",
+      text: `${user.username} joining from PORT: ${Math.floor(
+        Math.random() * 9999
+      )}`,
+    })
     io.to(user.node).emit("nodeData", {
       node: user.node,
       users: usersInNode(user.node),
