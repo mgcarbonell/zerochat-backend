@@ -20,9 +20,6 @@ const app = express()
 // middleware - server logging
 app.use(morgan("dev"))
 
-// middleware - JSON parsing
-app.use(express.json())
-
 // middleware - cors
 const corsOptions = {
   // from which URLs do we want to accept requests
@@ -32,6 +29,10 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+
+// middleware - JSON parsing
+app.use(express.json())
+
 
 /*
 app.use(cors())
