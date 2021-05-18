@@ -13,6 +13,7 @@ const {
   getUser,
   usersInNode,
 } = require("./roomManagement.js")
+const { restart } = require("nodemon")
 
 const port = process.env.PORT || 4000
 const app = express()
@@ -24,14 +25,14 @@ app.use(morgan("dev"))
 app.use(express.json())
 
 // middleware - cors
-// const corsOptions = {
-//   // from which URLs do we want to accept requests
-//   origin: [process.env.CLIENT_URL],
-//   credentials: true, // allow the session cookie to be sent to and from the client
-//   optionsSuccessStatus: 204,
-// }
+const corsOptions = {
+  // from which URLs do we want to accept requests
+  origin: [process.env.CLIENT_URL] || ['*'],
+  credentials: true, // allow the session cookie to be sent to and from the client
+  optionsSuccessStatus: 204,
+}
 
-// app.use(cors(corsOptions))
+app.use(cors(corsOptions))
 /*
 app.use(cors())
 */
@@ -61,6 +62,13 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTION, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+})
 // middleware - API routes
 app.use("/api/v1/auth", routes.auth)
 app.use("/api/v1/users", routes.users)
