@@ -24,14 +24,14 @@ app.use(morgan("dev"))
 app.use(express.json())
 
 // middleware - cors
-const corsOptions = {
-  // from which URLs do we want to accept requests
-  origin: [process.env.CLIENT_URL],
-  credentials: true, // allow the session cookie to be sent to and from the client
-  optionsSuccessStatus: 204,
-}
+// const corsOptions = {
+//   // from which URLs do we want to accept requests
+//   origin: [process.env.CLIENT_URL],
+//   credentials: true, // allow the session cookie to be sent to and from the client
+//   optionsSuccessStatus: 204,
+// }
 
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
 /*
 app.use(cors())
 */
