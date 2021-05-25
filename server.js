@@ -26,16 +26,12 @@ app.use(express.json())
 
 // middleware - cors
 const corsOptions = {
-  // from which URLs do we want to accept requests
-  origin: [process.env.CLIENT_URL] || ['*'],
+  origin: [process.env.CLIENT_URL],
   credentials: true, // allow the session cookie to be sent to and from the client
   optionsSuccessStatus: 204,
 }
 
 app.use(cors(corsOptions))
-/*
-app.use(cors())
-*/
 
 const server = http.createServer(app)
 const io = require("socket.io")(server, {
@@ -48,7 +44,6 @@ const io = require("socket.io")(server, {
 
 app.use(
   session({
-    // session is stored in the DB
     secret: process.env.SESSION_SECRET,
     resave: false, // will not resave sessions
     saveUninitialized: false, // only create a session when a property is added to the session
@@ -62,13 +57,6 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTION, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-})
 // middleware - API routes
 app.use("/api/v1/auth", routes.auth)
 app.use("/api/v1/users", routes.users)
