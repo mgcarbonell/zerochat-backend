@@ -1,19 +1,19 @@
 // imports
-require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const session = require("express-session")
-const morgan = require("morgan")
-const http = require("http")
-const routes = require("./routes")
-const passport = require("./passport")
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const session = require("express-session");
+const morgan = require("morgan");
+const http = require("http");
+const routes = require("./routes");
+const passport = require("./passport");
 const {
   addUsers,
   removeUser,
   getUser,
   usersInNode,
 } = require("./roomManagement.js")
-const { restart } = require("nodemon")
+// const { restart } = require("nodemon")
 
 const port = process.env.PORT || 4000
 const app = express()
@@ -26,7 +26,7 @@ app.use(express.json())
 
 // middleware - cors
 const corsOptions = {
-  origin: [process.env.CLIENT_URL],
+  origin: process.env.CLIENT_URL,
   credentials: true, // allow the session cookie to be sent to and from the client
   optionsSuccessStatus: 204,
 }
@@ -57,7 +57,7 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-// Attempts to resolve CORs
+// Attempts to resolve CORS
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
   res.header(
