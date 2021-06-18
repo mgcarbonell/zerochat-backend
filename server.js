@@ -57,6 +57,15 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Attempts to resolve CORs
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+})
+
 // middleware - API routes
 app.use("/api/v1/auth", routes.auth)
 app.use("/api/v1/users", routes.users)
